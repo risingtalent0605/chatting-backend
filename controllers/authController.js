@@ -40,7 +40,6 @@ const registerUser = async (req, res) => {
     subject: 'Email Verification',
     html: `<p>Click <a href="${verificationUrl}">here</a> to verify your email address.</p>`,
   };
-  console.log(mailOptions);
   
   try {
     await transporter.sendMail(mailOptions);
@@ -78,31 +77,28 @@ const verifyEmail = async (req, res) => {
 const loginUser = async (req, res) => {
 
   const { email, password } = req.body;
-  console.log(email, password);
   
-    const user = await User.findOne({ email });
+  const user = await User.findOne({ email });
 
-    if (!user) return res.status(400).json({ error: 'Invalid email!' });
+  if (!user) return res.status(400).json({ error: 'Invalid email!' });
 
-    if (!user.isVerified && !user.accessToken) return res.status(400).json({ error: 'Email is not verified!' })
-      
-    if (user.accessToken) return res.status(400).json({ error: 'Please login with Google' });
-      
-    const isMatch = await bcrypt.compare(password, user.password);
+  if (!user.isVerified && !user.accessToken) return res.status(400).json({ error: 'Email is not verified!' })
     
-    if (!isMatch) return res.status(400).json({ error: 'Invalid password!' });
+  if (user.accessToken) return res.status(400).json({ error: 'Please login with Google' });
+    
+  const isMatch = await bcrypt.compare(password, user.password);
+  
+  if (!isMatch) return res.status(400).json({ error: 'Invalid password!' });
 
-    const token = jwt.sign({ name: user.name, email: user.email }, JWT_SECRET, { expiresIn: '1d' });
+  const token = jwt.sign({ name: user.name, email: user.email }, JWT_SECRET, { expiresIn: '1d' });
 
-    res.status(200).json({ token });
+  res.status(200).json({ token });
 
 };
 
 const googleLogin = async (req, res) => {
 
   const { email, name, accessToken } = req.body;
-
-  console.log(email, name, accessToken)
 
   try {
 
