@@ -24,14 +24,15 @@ const registerUser = async (req, res) => {
   const user = await User.findOne({ email });
   
   if (user && user.isVerified) return res.status(400).json({ error: 'Email already exist.' });
-
+  
+  const verificationToken = jwt.sign({ email }, JWT_SECRET, { expiresIn: '1d' });
+  
   if (!user) {
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({ name, email, password: hashedPassword, verificationToken });
     newUser.save();
   }    
   
-  const verificationToken = jwt.sign({ email }, JWT_SECRET, { expiresIn: '1d' });
   const verificationUrl = `${frontend_url}verify-email?token=${verificationToken}`;
 
   const mailOptions = {
