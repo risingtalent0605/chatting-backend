@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const UserRouter = require('./routes/authRoutes');
+const path = require('path');
+
 require("dotenv").config();
 
 const mongoURI = process.env.MONGO_URI;
@@ -14,9 +16,9 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use("/api", UserRouter);
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'build', 'index.html'));
+// });
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
