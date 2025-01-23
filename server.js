@@ -4,6 +4,29 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const UserRouter = require('./routes/authRoutes');
 const path = require('path');
+// const admin = require("firebase-admin");
+// const serviceAccount = require("./firebase-service-account.json");
+
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+// });
+
+// const sendNotification = async (deviceToken, title, body) => {
+//   try {
+//     const message = {
+//       notification: {
+//         title,
+//         body,
+//       },
+//       token: deviceToken,
+//     };
+
+//     const response = await admin.messaging().send(message);
+//     console.log("Notification sent successfully:", response);
+//   } catch (error) {
+//     console.error("Error sending notification:", error);
+//   }
+// };
 
 require("dotenv").config();
 
